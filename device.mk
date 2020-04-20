@@ -10,10 +10,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)
 
 # Get non-open-source specific aspects
-$(call inherit-product-if-exists, vendor/realme/RMX1851/RMX1851-vendor.mk)
+$(call inherit-product-if-exists, vendor/lenovo/jd2019/jd2019-vendor.mk)
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 2248
+TARGET_SCREEN_HEIGHT := 2340
 TARGET_SCREEN_WIDTH := 1080
 
 # FM
@@ -132,8 +132,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.msm.usb.configfs.rc \
-    init.oppo.fingerprints.rc \
-    init.oppo.rc \
+    init.lenovo.common.rc \
+    init.lenovo.rc \
     init.qcom.early_boot.sh \
     init.qcom.post_boot.sh \
     init.qcom.rc \
@@ -144,7 +144,7 @@ PRODUCT_PACKAGES += \
     init.qti.qseecomd.sh \
     init.recovery.qcom.rc \
     init.target.rc \
-    ueventd.qcom.rc
+    ueventd.rc
 
 # Context Hub
 PRODUCT_PACKAGES += \
@@ -153,7 +153,7 @@ PRODUCT_PACKAGES += \
 
 # Device-specific settings
 PRODUCT_PACKAGES += \
-    RealmeParts
+    lenovoParts
 
 # Display
 PRODUCT_PACKAGES += \
@@ -177,8 +177,8 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.1-service.clearkey
 
 # Fingerprint
-PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service.RMX1851
+#PRODUCT_PACKAGES += \
+#    android.hardware.biometrics.fingerprint@2.1-service.jd2019
 
 # Health
 PRODUCT_PACKAGES += \
@@ -207,7 +207,7 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.RMX1851
+    android.hardware.light@2.0-service.jd2019
 
 # IPA
 PRODUCT_PACKAGES += \
@@ -281,7 +281,7 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    librecovery_updater_RMX1851
+    librecovery_updater_jd2019
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
@@ -291,7 +291,7 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
-    android.hardware.sensors@1.0-service.RMX1851 \
+    android.hardware.sensors@1.0-service.jd2019 \
     libsensorndkbridge
 
 PRODUCT_COPY_FILES += \

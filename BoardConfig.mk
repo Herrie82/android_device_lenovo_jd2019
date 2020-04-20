@@ -4,14 +4,14 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-BOARD_VENDOR := realme
+BOARD_VENDOR := lenovo
 
-DEVICE_PATH := device/realme/RMX1851
+DEVICE_PATH := device/lenovo/jd2019
 PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := kryo300
@@ -33,18 +33,24 @@ BOARD_HAS_QCA_FM_SOC := "cherokee"
 BOARD_HAVE_QCOM_FM := true
 
 # Kernel
-BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xA90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 service_locator.enable=1 androidboot.configfs=true androidboot.usbcontroller=a600000.dwc3 swiotlb=1 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DTBO := true
+
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_BOOTIMG_HEADER_VERSION := 1
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET := 0x01000000
+BOARD_RAMDISK_OFFSET     := 0x01000000
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_SOURCE := kernel/realme/sdm710
-TARGET_KERNEL_CONFIG := lineageos_RMX1851_defconfig
+#TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_KERNEL_SOURCE := kernel/lenovo/sdm710
+TARGET_KERNEL_CONFIG := jd2019_defconfig
 
 # Platform
 TARGET_BOARD_PLATFORM := sdm710
@@ -52,7 +58,7 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno616
 
 # Assert
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
-TARGET_OTA_ASSERT_DEVICE := RMX1851
+TARGET_OTA_ASSERT_DEVICE := jd2019
 
 # Audio
 AUDIO_FEATURE_ENABLED_AAC_ADTS_OFFLOAD := true
@@ -71,8 +77,6 @@ TARGET_USE_QTI_BT_STACK := true
 
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
-TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
-    /vendor/bin/hw/vendor.oppo.hardware.camera.oppoAlgoProcessService@1.0-service=27
 
 # Charger Mode
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -114,17 +118,18 @@ JAVA_SOURCE_OVERLAYS := \
     org.lineageos.hardware|$(DEVICE_PATH)/lineagehw|**/*.java
 
 # Partitions
-BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
+BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864			# 65536
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864		# 65536
 BOARD_DTBOIMG_PARTITION_SIZE := 25165824
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 5578424320
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 53600959488
-BOARD_VENDORIMAGE_PARTITION_SIZE := 1677721600
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := ‭5368709120		# 5242880
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 54416866304	# 53141487 (54416882688 - 16384)
+BOARD_VENDORIMAGE_PARTITION_SIZE := ‭1073741824		# 1048576
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
 BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
+
 BOARD_ROOT_EXTRA_SYMLINKS := \
     /mnt/vendor/persist:/persist \
     /vendor/bt_firmware:/bt_firmware \
@@ -140,7 +145,7 @@ TARGET_COPY_OUT_VENDOR := vendor
 
 # Power
 TARGET_HAS_NO_WLAN_STATS := true
-TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/touch/tp_dev/gesture_on"
 TARGET_USES_INTERACTION_BOOST := true
 
 # Properties
@@ -160,7 +165,7 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 
 # Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_RMX1851
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_jd2019
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # RIL
@@ -169,11 +174,11 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 TARGET_RIL_VARIANT := caf
 
 # Security patch level
-VENDOR_SECURITY_PATCH := 2019-12-05
+#VENDOR_SECURITY_PATCH := 2019-12-05
 
 # Sepolicy
 include device/qcom/sepolicy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+#BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
 # System-as-root
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
@@ -200,4 +205,4 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit from the proprietary version
--include vendor/realme/RMX1851/BoardConfigVendor.mk
+-include vendor/lenovo/jd2019/BoardConfigVendor.mk
