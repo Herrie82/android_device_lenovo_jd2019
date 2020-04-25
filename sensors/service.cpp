@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "android.hardware.sensors@1.0-service.RMX1851"
+#define LOG_TAG "android.hardware.sensors@1.0-service.jd2019"
 
 #include <android/hardware/sensors/1.0/ISensors.h>
 #include <hidl/LegacySupport.h>

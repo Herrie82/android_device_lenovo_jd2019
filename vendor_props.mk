@@ -90,7 +90,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Display post-processing
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.display.ad=1 \
-    ro.vendor.display.ad.sdr_calib_data=/vendor/etc/OPPO_OLED_AD_calib.cfg \
     ro.vendor.display.cabl=2 \
     ro.vendor.display.sensortype=2 \
     vendor.display.enable_default_color_mode=1
