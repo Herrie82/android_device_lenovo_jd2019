@@ -4,23 +4,20 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio.deep_buffer.media=true \
     audio.offload.min.duration.secs=30 \
     persist.vendor.audio.avs.afe_api_version=2 \
-    persist.vendor.audio.button_jack.profile=volume \
-    persist.vendor.audio.button_jack.switch=0 \
     persist.vendor.audio.fluence.audiorec=false \
-    persist.vendor.audio.fluence.speaker=true \
+    persist.vendor.audio.fluence.speaker=false \
     persist.vendor.audio.fluence.tmic.enabled=false \
     persist.vendor.audio.fluence.voicecall=true \
-    persist.vendor.audio.fluence.voicerec=false \
+    persist.vendor.audio.fluence.voicerec=true \
     persist.vendor.audio.hifi.int_codec=true \
     persist.vendor.audio.ras.enabled=false \
     persist.vendor.audio.spv3.enable=true \
     ro.af.client_heap_size_kbyte=7168 \
     ro.config.media_vol_steps=25 \
     ro.config.vc_call_vol_steps=7 \
-    ro.vendor.audio.sdk.fluencetype=none \
+    ro.vendor.audio.sdk.fluencetype=fluence \
     ro.vendor.audio.sdk.ssr=false \
     ro.vendor.audio.soundfx.usb=true \
-    vendor.audio.adm.buffering.ms=6 \
     vendor.audio.apptype.multirec.enabled=false \
     vendor.audio.dolby.ds2.enabled=false \
     vendor.audio.dolby.ds2.hardbypass=false \
@@ -116,6 +113,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.sf.color_saturation=1.0 \
     ro.opengles.version=196610 \
     sdm.drop_skewed_vsync=1
+
+# Keystore
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore_desede=true
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \

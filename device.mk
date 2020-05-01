@@ -132,6 +132,7 @@ PRODUCT_PACKAGES += \
     init.msm.usb.configfs.rc \
     init.lenovo.common.rc \
     init.lenovo.rc \
+    init.lenovo.usb.configfs.rc \
     init.qcom.early_boot.sh \
     init.qcom.post_boot.sh \
     init.qcom.rc \
@@ -142,7 +143,7 @@ PRODUCT_PACKAGES += \
     init.qti.qseecomd.sh \
     init.recovery.qcom.rc \
     init.target.rc \
-    ueventd.rc
+    ueventd.qcom.rc
 
 # Context Hub
 PRODUCT_PACKAGES += \
