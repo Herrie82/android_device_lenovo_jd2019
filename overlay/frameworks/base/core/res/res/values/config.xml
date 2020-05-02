@@ -30,8 +30,8 @@
          when adapting to brighter or darker environments.  This parameter controls how quickly
          brightness changes occur in response to an observed change in light level that exceeds the
          hysteresis threshold. -->
-    <integer name="config_autoBrightnessBrighteningLightDebounce">1000</integer>
-    <integer name="config_autoBrightnessDarkeningLightDebounce">4000</integer>
+    <integer name="config_autoBrightnessBrighteningLightDebounce">2000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">5000</integer>
 
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N  1 zones as follows:
@@ -42,17 +42,26 @@
          Zone N + 1     array[N] <= LUX < infinity
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>45</item>
-        <item>1025</item>
-        <item>1480</item>
-        <item>2250</item>
-        <item>3300</item>
-        <item>10000</item>
+        <item>10</item>
+        <item>19</item>
+        <item>38</item>
+        <item>58</item>
+        <item>96</item>
+        <item>128</item>
+        <item>224</item>
+        <item>288</item>
+        <item>352</item>
+        <item>460</item>
+        <item>600</item>
+        <item>700</item>
+        <item>960</item>
+        <item>1280</item>
+        <item>2240</item>
     </integer-array>
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">44</integer>
+    <integer name="config_screenBrightnessSettingDefault">102</integer>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
@@ -61,19 +70,28 @@
     <!-- Screen brightness used to dim the screen when the user activity
          timeout expires.  May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDim">4</integer>
+    <integer name="config_screenBrightnessDim">10</integer>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
+        <item>1</item>
         <item>8</item>
-        <item>22</item>
-        <item>48</item>
-        <item>78</item>
-        <item>128</item>
-        <item>206</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>57</item>
+        <item>73</item>
+        <item>93</item>
+        <item>109</item>
+        <item>130</item>
+        <item>145</item>
+        <item>166</item>
+        <item>189</item>
         <item>255</item>
     </integer-array>
 
@@ -92,7 +110,7 @@
                 <string ...>M -5,0 L -5,10 L 5,10 L 5,0 Z @dp</string>
          @see https://www.w3.org/TR/SVG/paths.html#PathData
          -->
-    <string name="config_mainBuiltInDisplayCutout">M -143,0 L -143,76 L 143,76 L 143,0 Z</string>
+    <string name="config_mainBuiltInDisplayCutout">M -80,0 L -50,90 L 50,90 L 80,0 Z</string>
 
     <!-- Like config_mainBuiltInDisplayCutout, but this path is used to report the
          one single bounding rect per device edge to the app via
@@ -109,10 +127,10 @@
     </string>
 
     <!-- Height of the status bar -->
-    <dimen name="status_bar_height_portrait">31.1dp</dimen>
+    <dimen name="status_bar_height_portrait">30.0dp</dimen>
 
     <!-- Height of the status bar in landscape -->
-    <dimen name="status_bar_height_landscape">28.0dp</dimen>
+    <dimen name="status_bar_height_landscape">30.0dp</dimen>
 
     <!-- The status bar padding before and after icons -->
     <dimen name="rounded_corner_content_padding">12dp</dimen>
@@ -123,7 +141,7 @@
 
     <!-- Radius of the software rounded corners at the top of the display in its natural
         orientation. If zero, the value of rounded_corner_radius is used. -->
-    <dimen name="rounded_corner_radius_top">108px</dimen>
+    <dimen name="rounded_corner_radius_top">106px</dimen>
 
     <!-- Radius of the software rounded corners at the bottom of the display in its natural
         orientation. If zero, the value of rounded_corner_radius is used. -->
@@ -224,15 +242,16 @@
     <string-array translatable="false" name="networkAttributes">
         <item>wifi,1,1,1,-1,true</item>
         <item>mobile,0,0,0,-1,true</item>
-        <item>mobile_mms,2,0,4,300000,true</item>
-        <item>mobile_supl,3,0,2,300000,true</item>
-        <item>mobile_dun,4,0,2,300000,true</item>
-        <item>mobile_hipri,5,0,3,300000,true</item>
-        <item>mobile_fota,10,0,2,300000,true</item>
-        <item>mobile_ims,11,0,2,300000,true</item>
-        <item>mobile_cbs,12,0,2,300000,true</item>
-        <item>bluetooth,7,7,2,-1,true</item>
-        <item>ethernet,9,9,4,-1,true</item>
+        <item>mobile_mms,2,0,2,60000,true</item>
+        <item>mobile_supl,3,0,2,60000,true</item>
+        <item>mobile_dun,4,0,2,60000,true</item>
+        <item>mobile_hipri,5,0,3,60000,true</item>
+        <item>mobile_fota,10,0,2,60000,true</item>
+        <item>mobile_ims,11,0,2,60000,true</item>
+        <item>mobile_cbs,12,0,2,60000,true</item>
+        <item>wifi_p2p,13,1,0,-1,true</item>
+        <item>mobile_ia,14,0,2,-1,true</item>
+        <item>mobile_emergency,15,0,2,-1,true</item>
     </string-array>
 
     <!-- This string array should be overridden by the device to present a list of radio
@@ -241,10 +260,8 @@
     <!-- An Array of "[ConnectivityManager connectionType],
                       [# simultaneous connection types]"  -->
     <string-array translatable="false" name="radioAttributes">
-        <item>"1,1"</item>
-        <item>"0,1"</item>
-        <item>"7,1"</item>
-        <item>"9,1"</item>
+        <item>1,1</item>
+        <item>0,1</item>
     </string-array>
 
     <!-- Whether WiFi display is supported by this device.
@@ -284,7 +301,7 @@
 
     <!-- Configure wifi tcp buffersizes in the form:
          rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max -->
-    <string name="config_wifi_tcp_buffers" translatable="false">524288,1048576,5505024,262144,524288,5505024</string>
+    <string name="config_wifi_tcp_buffers" translatable="false">524288,1048576,2097152,262144,524288,1048576</string>
 
     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
          on the headphone/microphone jack. When false use the older uevent framework. -->
@@ -293,7 +310,7 @@
     <!-- Indicate whether closing the lid causes the device to go to sleep and opening
          it causes the device to wake up.
          The default is false. -->
-    <bool name="config_lidControlsSleep">true</bool>
+    <bool name="config_lidControlsSleep">false</bool>
 
     <!-- ComponentName of a dream to show whenever the system would otherwise have
          gone to sleep.  When the PowerManager is asked to go to sleep, it will instead
@@ -337,7 +354,7 @@
 
          Refer to autosuspend.h for details.
     -->
-    <bool name="config_powerDecoupleAutoSuspendModeFromDisplay">true</bool>
+    <bool name="config_powerDecoupleAutoSuspendModeFromDisplay">false</bool>
 
     <!-- Power Management: Specifies whether to decouple the interactive state of the
          device from the display on/off state.
@@ -361,7 +378,7 @@
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
          May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">17</integer>
+    <integer name="config_screenBrightnessDoze">1</integer>
 
     <!-- Configure mobile tcp buffer sizes in the form:
          rat-name:rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
@@ -426,16 +443,18 @@
 
     <!-- Vibrator pattern for feedback about a long screen/key press -->
     <integer-array name="config_longPressVibePattern">
-        <item>9</item>
-        <item>15</item>
-        <item>25</item>
+        <item>0</item>
+        <item>1</item>
+        <item>20</item>
+        <item>35</item>
     </integer-array>
 
     <!-- Vibrator pattern for feedback about touching a virtual key -->
     <integer-array name="config_virtualKeyVibePattern">
-        <item>5</item>
+        <item>0</item>
         <item>10</item>
         <item>20</item>
+        <item>35</item>
     </integer-array>
 
     <!-- Array of ConnectivityManager.TYPE_xxxx values allowable for tethering -->
@@ -476,10 +495,10 @@
     <bool name="config_supportAudioSourceUnprocessed">true</bool>
 
     <!-- Shutdown if the battery temperature exceeds (this value * 0.1) Celsius. -->
-    <integer name="config_shutdownBatteryTemperature">600</integer>
+    <integer name="config_shutdownBatteryTemperature">590</integer>
 
     <!-- Operating volatage for bluetooth controller. 0 by default-->
-    <integer name="config_bluetooth_operating_voltage_mv">3300</integer>
+    <integer name="config_bluetooth_operating_voltage_mv">3800</integer>
 
     <!-- Default list of files pinned by the Pinner Service -->
     <string-array translatable="false" name="config_defaultPinnerServiceFiles">
