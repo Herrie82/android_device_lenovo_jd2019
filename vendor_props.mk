@@ -24,9 +24,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio.flac.sw.decoder.24bit=true \
     vendor.audio_hal.in_period_size=144 \
     vendor.audio.hal.output.suspend.supported=false \
-    vendor.audio_hal.period_size=192 \
+    vendor.audio_hal.period_size=240 \
     vendor.audio_hal.period_multiplier=3 \
     vendor.audio.hw.aac.encoder=true \
+    vendor.audio.keep_alive.disabled=false \
     vendor.audio.noisy.broadcast.delay=600 \
     vendor.audio.offload.buffer.size.kb=64 \
     vendor.audio.offload.gapless.enabled=true \
@@ -45,8 +46,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.bluetooth.disableabsvol=true \
-    persist.bluetooth.disableinbandringing=false \
     persist.vendor.btstack.enable.splita2dp=true \
     persist.vendor.bluetooth.modem_nv_support=true \
     persist.vendor.btstack.iotinfo.report.enable=true \
@@ -152,5 +151,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.radio.sib16_support=1 \
     persist.vendor.radio.rat_on=combine \
     rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so \
-    ro.telephony.default_network=22,22 \
+    ro.telephony.default_network=22,20 \
     telephony.lteOnCdmaDevice=1

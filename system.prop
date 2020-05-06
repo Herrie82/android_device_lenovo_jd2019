@@ -10,8 +10,6 @@ audio.offload.gapless.enabled=true
 
 # Bluetooth
 bt.max.hfpclient.connections=1
-persist.bluetooth.disableinbandringing=false
-persist.bluetooth.disableabsvol=true
 persist.vendor.btstack.enable.splita2dp=true
 qcom.bluetooth.soc=cherokee
 vendor.bluetooth.soc=cherokee
@@ -52,8 +50,6 @@ ro.vendor.qti.core_ctl_max_cpu=6
 # Radio
 DEVICE_PROVISIONED=1
 ril.subscription.types=NV,RUIM
-persist.rcs.supported=0
-persist.radio.hvolte.enable=1
 ro.telephony.default_network=22,20
 persist.radio.multisim.config=dsds
 persist.radio.custom_exp_ecc=1
