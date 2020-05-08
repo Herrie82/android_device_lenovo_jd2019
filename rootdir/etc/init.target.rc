@@ -28,7 +28,7 @@
 #
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_apr audio_wglink audio_adsp_loader audio_q6_pdr audio_q6_notifier audio_q6 audio_usf audio_native audio_pinctrl_wcd audio_pinctrl_lpi audio_swr audio_tfa9874 audio_igo1201 audio_cs35l41 audio_platform audio_hdmi audio_wcd_spi audio_stub audio_digital_cdc audio_analog_cdc audio_msm_sdw audio_wcd_cpe audio_cpe_lsm audio_wcd9335 audio_machine_sdm710
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules apr_dlkm wglink_dlkm adsp_loader_dlkm q6_pdr_dlkm q6_notifier_dlkm q6_dlkm usf_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm cs35l41_dlkm platform_dlkm hdmi_dlkm wcd_spi_dlkm stub_dlkm digital_cdc_dlkm analog_cdc_dlkm msm_sdw_dlkm wcd_cpe_dlkm cpe_lsm_dlkm wcd9335_dlkm machine_dlkm
     write /proc/sys/kernel/sched_boost 1
     symlink /data/tombstones /tombstones
 
