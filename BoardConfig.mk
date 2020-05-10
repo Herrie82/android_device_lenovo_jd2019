@@ -181,8 +181,9 @@ BOARD_VNDK_VERSION := current
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Verified Boot
-BOARD_AVB_ENABLE := true
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flag 2
+BOARD_AVB_ENABLE := false
+#BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flag 2
+BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
@@ -196,6 +197,37 @@ WIFI_DRIVER_STATE_OFF := "OFF"
 WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+BOARD_VENDOR_KERNEL_MODULES += \
+$(DEVICE_PATH)/modules/adsp_loader_dlkm.ko \
+$(DEVICE_PATH)/modules/analog_cdc_dlkm.ko \
+$(DEVICE_PATH)/modules/apr_dlkm.ko \
+$(DEVICE_PATH)/modules/cpe_lsm_dlkm.ko \
+$(DEVICE_PATH)/modules/cs35l41_dlkm.ko \
+$(DEVICE_PATH)/modules/digital_cdc_dlkm.ko \
+$(DEVICE_PATH)/modules/hdmi_dlkm.ko \
+$(DEVICE_PATH)/modules/machine_dlkm.ko \
+$(DEVICE_PATH)/modules/mbhc_dlkm.ko \
+$(DEVICE_PATH)/modules/msm_sdw_dlkm.ko \
+$(DEVICE_PATH)/modules/native_dlkm.ko \
+$(DEVICE_PATH)/modules/pinctrl_lpi_dlkm.ko \
+$(DEVICE_PATH)/modules/pinctrl_wcd_dlkm.ko \
+$(DEVICE_PATH)/modules/platform_dlkm.ko \
+$(DEVICE_PATH)/modules/q6_dlkm.ko \
+$(DEVICE_PATH)/modules/q6_notifier_dlkm.ko \
+$(DEVICE_PATH)/modules/q6_pdr_dlkm.ko \
+$(DEVICE_PATH)/modules/stub_dlkm.ko \
+$(DEVICE_PATH)/modules/swr_dlkm.ko \
+$(DEVICE_PATH)/modules/swr_ctrl_dlkm.ko \
+$(DEVICE_PATH)/modules/usf_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd9335_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd934x_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd9xxx_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd_core_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd_cpe_dlkm.ko \
+$(DEVICE_PATH)/modules/wcd_spi_dlkm.ko \
+$(DEVICE_PATH)/modules/wglink_dlkm.ko \
+$(DEVICE_PATH)/modules/wsa881x_dlkm.ko
 
 # Inherit from the proprietary version
 -include vendor/lenovo/jd2019/BoardConfigVendor.mk
