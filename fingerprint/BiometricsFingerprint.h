@@ -24,8 +24,6 @@
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <android/hardware/biometrics/fingerprint/2.1/IBiometricsFingerprint.h>
-#include <android/hardware/biometrics/fingerprint/2.1/types.h>
-#include <vendor/goodix/hardware/biometrics/fingerprint/2.1/IBiometricsFingerprint.h>
 
 namespace android {
 namespace hardware {
@@ -41,13 +39,15 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::hidl_string;
-using ::android::OK;
 using ::android::sp;
-using ::android::status_t;
 
 struct BiometricsFingerprint : public IBiometricsFingerprint {
 public:
     BiometricsFingerprint();
+    ~BiometricsFingerprint();
+
+    // Method to wrap legacy HAL with BiometricsFingerprint class
+    static IBiometricsFingerprint* getInstance();
 
     // Methods from ::android::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprint follow.
     Return<uint64_t> setNotify(const sp<IBiometricsFingerprintClientCallback>& clientCallback) override;
@@ -60,23 +60,18 @@ public:
     Return<RequestStatus> remove(uint32_t gid, uint32_t fid) override;
     Return<RequestStatus> setActiveGroup(uint32_t gid, const hidl_string& storePath) override;
     Return<RequestStatus> authenticate(uint64_t operationId, uint32_t gid) override;
-    Return<RequestStatus> cleanUp();
-    Return<RequestStatus> pauseEnroll();
-    Return<RequestStatus> continueEnroll();
-    Return<RequestStatus> setTouchEventListener();
-    Return<RequestStatus> dynamicallyConfigLog(uint32_t on);
-    Return<RequestStatus> pauseIdentify();
-    Return<RequestStatus> continueIdentify();
-    Return<RequestStatus> getAlikeyStatus();
-    Return<RequestStatus> getEnrollmentTotalTimes();
-    Return<RequestStatus> getEngineeringInfo(uint32_t type);
-    Return<RequestStatus> touchDown();
-    Return<RequestStatus> touchUp();
 
 private:
-    sp<vendor::goodix::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprint> mgoodixBiometricsFingerprint;
-    sp<vendor::goodix::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprintClientCallback> mgoodixClientCallback;
-    static Return<RequestStatus> goodixToAOSPRequestStatus(vendor::goodix::hardware::biometrics::fingerprint::V2_1::RequestStatus req);
+    static fingerprint_device_t* openHal();
+    static void notify(const fingerprint_msg_t *msg); /* Static callback for legacy HAL implementation */
+    static Return<RequestStatus> ErrorFilter(int32_t error);
+    static FingerprintError VendorErrorFilter(int32_t error, int32_t* vendorCode);
+    static FingerprintAcquiredInfo VendorAcquiredFilter(int32_t error, int32_t* vendorCode);
+    static BiometricsFingerprint* sInstance;
+
+    std::mutex mClientCallbackMutex;
+    sp<IBiometricsFingerprintClientCallback> mClientCallback;
+    fingerprint_device_t *mDevice;
 };
 
 }  // namespace implementation
