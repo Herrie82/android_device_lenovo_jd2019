@@ -128,12 +128,10 @@ lib/libchromaflash.so
 lib/libdualcameraddm.so
 lib/libjni_chromaflash.so
 lib/libjni_dualcamera.so
-
 lib64/libchromaflash.so
 lib64/libdualcameraddm.so
 lib64/libjni_chromaflash.so
 lib64/libjni_dualcamera.so
-
 vendor/camera/face++/beauty3D/db.txt
 vendor/camera/face++/beauty3D/expdata
 vendor/camera/face++/beauty3D/mgbeautify_1_2_4_model
@@ -146,9 +144,7 @@ vendor/camera/face++/models/human_detect
 vendor/camera/face++/models/megviisegment_model
 vendor/camera/face++/models/skeleton_detect
 vendor/camera/face++/resource/lut_origin_white2.bin
-
 vendor/etc/camera/camxoverridesettings.txt
-
 vendor/lib/camera/com.qti.eeprom.truly_cmb433.so
 vendor/lib/camera/com.qti.sensor.ov16b10.so
 vendor/lib/camera/com.qti.sensor.ov8856.so
@@ -210,11 +206,9 @@ vendor/lib/libdualcam_optical_zoom.so
 vendor/lib/libdualcam_optical_zoom_control.so
 vendor/lib/libmmcamera_faceproc.so
 vendor/lib/libmmcamera_faceproc2.so
-vendor/lib/libmm-omxcore.so
 vendor/lib/libmpbase.so
 vendor/lib/libremosaic_daemon.so
 vendor/lib/libvideoutils.so
-
 vendor/lib64/camera/com.qti.eeprom.truly_cmb433.so
 vendor/lib64/camera/com.qti.sensor.ov16b10.so
 vendor/lib64/camera/com.qti.sensor.ov8856.so
@@ -262,9 +256,7 @@ vendor/lib64/libcamxtintlessalgo.so
 vendor/lib64/libcom.qti.chinodeutils.so
 vendor/lib64/libmmcamera_faceproc.so
 vendor/lib64/libmmcamera_faceproc2.so
-vendor/lib64/libmm-omxcore.so
 vendor/lib64/libremosaic_daemon.so
-
 
 # Camera firmware
 vendor/firmware/CAMERA_ICP.elf
