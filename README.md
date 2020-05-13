@@ -3,11 +3,14 @@ Copyright (C) 2019 The LineageOS Project
 Device configuration for Lenovo Z5s
 =========================================
 
-The Lenovo Z5s (codenamed _"jd2019"_) L78071 is a mid-range smartphone from Lenovo.
+The Lenovo Z5s (codenamed _"jd2019"_) L78071 is a mid-range smartphone from Lenovo. Released in December 2018.
 
-Released in December 2018.
+What doesn't work (as of May 10 2020):
+- RIL, can't connect to modem;
+- Fingerprint reader;
+- Screen lock;
 
-## Device specifications
+## Device specifications (info from GSMArena)
 
 Basic   | Spec Sheet
 -------:|:-------------------------
