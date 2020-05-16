@@ -28,8 +28,11 @@
 #
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules apr_dlkm wglink_dlkm adsp_loader_dlkm q6_pdr_dlkm q6_notifier_dlkm q6_dlkm usf_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm cs35l41_dlkm platform_dlkm hdmi_dlkm wcd_spi_dlkm stub_dlkm digital_cdc_dlkm analog_cdc_dlkm msm_sdw_dlkm wcd_cpe_dlkm cpe_lsm_dlkm wcd9335_dlkm machine_dlkm
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_apr audio_wglink audio_adsp_loader audio_q6_pdr audio_q6_notifier audio_q6 audio_usf audio_native audio_pinctrl_wcd audio_pinctrl_lpi audio_swr audio_tfa9874 audio_igo1201 audio_cs35l41 audio_platform audio_hdmi audio_wcd_spi audio_stub audio_digital_cdc audio_analog_cdc audio_msm_sdw audio_wcd_cpe audio_cpe_lsm audio_wcd9335 audio_machine_sdm710
     write /proc/sys/kernel/sched_boost 1
+    mkdir /firmware 0771 system system
+    mkdir /bt_firmware 0771 system system
+    mkdir /dsp 0771 media media
     symlink /data/tombstones /tombstones
 
 on init
@@ -45,7 +48,7 @@ on init
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    mount_all /vendor/etc/fstab.qcom
+    mount_all /vendor/etc/fstab.qcom --early
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist
@@ -55,8 +58,6 @@ on post-fs
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
 
-    start vendor.qseecomd
-    exec - system system -- /vendor/bin/init.qti.qseecomd.sh
     write /dev/ipa 1
 
 service sec_nvm /vendor/bin/sec_nvm
@@ -64,25 +65,22 @@ service sec_nvm /vendor/bin/sec_nvm
     user system
     group system
 
+on late-fs
+    mount_all /vendor/etc/fstab.qcom --late
+
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 start
-#   mkdir /data/vendor/hbtp 0750 system system
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 end
-    mkdir /data/vendor/tloc 0700 system drmrpc
+    mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/vendor/nnhal 0700 system system
-    mkdir /data/vendor/dolby 0770 media media
 
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
 on boot
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 start
-#   chown system system /sys/kernel/hbtp/display_pwr
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 end
+    chown system system /sys/kernel/hbtp/display_pwr
     start rmt_storage
     start rfs_access
     write /dev/cpuset/top-app/cpus 0-7
@@ -126,19 +124,9 @@ on boot
     setprop vendor.usb.rmnet.func.name "gsi"
     setprop vendor.usb.rmnet.inst.name "rmnet"
     setprop vendor.usb.dpl.inst.name "dpl"
+    setprop vendor.usb.qdss.inst.name "qdss"
     setprop sys.usb.configfs 1
 
-# Huaqin modify for JD2019-114 by zhaojunhai1 at 2018/8/20 start
-    # goodix fingerprint
-    chown system system /dev/goodix_fp
-    chmod 666 /dev/goodix_fp
-# Huaqin modify for JD2019-114 by zhaojunhai1 at 2018/8/20 en
-
-#start camera server as daemon
-#service qcamerasvr /system/bin/mm-qcamera-daemon
-#    class late_start
-#    user camera
-#    group camera system inet input graphics
 #pd-mapper
 service vendor.pd_mapper /vendor/bin/pd-mapper
     class core
@@ -163,7 +151,6 @@ on property:init.svc.vendor.per_mgr=running
 
 on property:sys.shutdown.requested=*
     stop vendor.per_proxy
-    stop vendor.ims_rtp_daemon
 
 on boot
     chown system system /sys/class/leds/red/blink
@@ -171,39 +158,13 @@ on boot
     chown system system /sys/class/leds/blue/blink
 
 on charger
-    start vendor.hvdcp_opti
     setprop sys.usb.configfs 1
-
-## import cne init file
-#on post-fs
-#    export LD_PRELOAD /vendor/lib/libNimsWrap.so
-#
-## Allow usb charging to be disabled peristently
-#on property:persist.usb.chgdisabled=1
-#    write /sys/class/power_supply/battery/charging_enabled 0
-#
-#on property:persist.usb.chgdisabled=0
-#    write /sys/class/power_supply/battery/charging_enabled 1
-
-service vendor.qseecomd /vendor/bin/qseecomd
-    class core
-    user root
-    group root
 
 service spdaemon /vendor/bin/spdaemon
     class core
     user system
     group system
 
-#service mpdecision /system/vendor/bin/mpdecision --avg_comp
-#   user root
-#   disabled
-#
-#service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
-#   user system
-#   group system
-#   disabled
-#
 service thermal-engine /system/vendor/bin/thermal-engine
    class main
    user root
@@ -211,20 +172,7 @@ service thermal-engine /system/vendor/bin/thermal-engine
    socket thermal-recv-client stream 0660 system system
    socket thermal-recv-passive-client stream 0666 system system
    socket thermal-send-rule stream 0660 system system
-   group root system
-
-#service security-check1 /sbin/security_boot_check system
-#    class core
-#    oneshot
-#
-#service security-check2 /sbin/security_boot_check recovery
-#    class core
-#    oneshot
-#
-#service time_daemon /system/vendor/bin/time_daemon
-#   class late_start
-#   user root
-#   group root
+   group root
 
 service adsprpcd /vendor/bin/adsprpcd rootpd
    class main
@@ -246,73 +194,6 @@ service cdsprpcd /vendor/bin/cdsprpcd
    user system
    group system
 
-#service audiod /vendor/bin/audiod
-#   class late_start
-#   user system
-#   group system
-#
-#service usf_tester /vendor/bin/usf_tester
-#    user system
-#    group system inet
-#    disabled
-#
-#service usf_epos /vendor/bin/usf_epos
-#    user system
-#    group system inet
-#    disabled
-#
-#service usf_gesture /vendor/bin/usf_gesture
-#    user system
-#    group system inet
-#    disabled
-#
-
-#service usf_sync_gesture /system/bin/usf_sync_gesture
-#    user system
-#    group system inet
-#    disabled
-#
-
-#service usf_p2p /system/bin/usf_p2p
-#    user system
-#    group system inet
-#    disabled
-#
-#service usf_hovering /vendor/bin/usf_hovering
-#    user system
-#    group system inet
-#    disabled
-#
-#service usf_proximity /system/bin/usf_proximity
-#    user system
-#    group system inet
-#    disabled
-#
-#service usf-post-boot /system/vendor/bin/sh /system/etc/usf_post_boot.sh
-#    class late_start
-#    user root
-#    disabled
-#    oneshot
-#
-#on property:init.svc.bootanim=stopped
-#    start usf-post-boot
-#
-#
-#on boot
-#    insmod /system/lib/modules/adsprpc.ko
-#    insmod /system/lib/modules/mhi.ko
-## access permission for secure touch
-#    chmod 0660 /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch_enable
-#    chmod 0440 /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch
-#    chmod 0660 /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch_enable
-#    chmod 0440 /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch
-#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch_enable
-#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch
-#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch_enable
-#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch
-#
-#
-#
 ## imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
 service vendor.imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
@@ -327,59 +208,6 @@ service vendor.imsdatadaemon /system/vendor/bin/imsdatadaemon
     socket ims_datad stream 0660 system radio
     group system wifi radio inet log diag
     disabled
-
-#service mdm_helper /system/bin/mdm_helper
-#    class core
-#    onrestart setprop ro.service.mdm_helper_restarted "true"
-#    disabled
-#
-#service mdm_helper_proxy /system/bin/mdm_helper_proxy
-#    class core
-#    disabled
-#
-#service mdm_launcher /system/bin/sh /init.mdm.sh
-#    class main
-#    oneshot
-#
-#service qcamerasvr /system/bin/mm-qcamera-daemon
-#    class late_start
-#    user camera
-#    group camera system inet input graphics
-#
-# Stop mdm_helper_proxy in case of shutdown
-#on property:sys.shutdown.requested=*
-#    stop mdm_helper_proxy
-#
-# Stop mdm_helper_proxy on APQ target
-#on property:ro.radio.noril=yes
-#    stop mdm_helper_proxy
-#
-#on property:persist.airplane.mode.pwr.svg=enabled
-#    setprop ro.mdm_helper_proxy_req false
-#
-#on property:init.svc.ril-daemon=running
-#    setprop ro.mdm_helper_proxy_req true
-#
-## Start mdm_helper_proxy
-#on property:ro.mdm_helper_proxy_req=true
-#    start mdm_helper_proxy
-#
-## QCA1530 SoC core detect
-#service gnss-detect /system/vendor/bin/gnss.qca1530.sh detect
-#   class core
-#   oneshot
-#
-## QCA1530 SoC late_start group trigger
-#service gnss-init /system/vendor/bin/gnss.qca1530.sh init
-#   class late_start
-#   oneshot
-#
-## QCA1530 SoC Service Daemon
-#service gnss-svcd /system/vendor/bin/gnss.qca1530.sh start
-#   class late_start
-#   user root
-#   group gps system qcom_diag diag log inet net_raw
-#   disabled
 
 service vendor.imsrcsservice /system/vendor/bin/imsrcsd
     class main
@@ -413,65 +241,29 @@ service ppd /vendor/bin/mm-pp-dpps
     socket pps stream 0660 system system
     disabled
 
-on property:init.svc.vendor.hwcomposer-2-1=stopped
+on property:init.svc.vendor.hwcomposer-2-3=stopped
     stop ppd
 
-on property:init.svc.vendor.hwcomposer-2-1=running
+on property:init.svc.vendor.hwcomposer-2-3=running
     start ppd
 
-on property:init.svc.vendor.hwcomposer-2-1=restarting
+on property:init.svc.vendor.hwcomposer-2-3=restarting
     stop ppd
-
-#service nqs /system/bin/nqs
-#    class late_start
-#    socket nqs_qsb_comm stream 660 system system
-#    user system
-#    group drmrpc
-#
-#service adsprpcd /system/vendor/bin/adsprpcd
-#   class main
-#   user media
-#   group media
-#
-##Start picture quality tuning service
-#service vqttoolservice /system/bin/vqttoolservice
-#    class late_start
-#    socket vqtss stream 0660 system system
-#    user system
-#    group system
 
 on charger
      setprop sys.usb.configfs 1
 
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 start
-#service hbtp /system/vendor/bin/hbtp_daemon
-#     class main
-#     user system
-#     group system
-#     disabled
-# huaqin add for JD2019-313 by xudayi at 2018/9/11 end
+service hbtp /system/vendor/bin/hbtp_daemon
+     class main
+     user system
+     group system
+     disabled
 
 service energy-awareness /system/vendor/bin/energy-awareness
     class main
     user system
     group system
     oneshot
-
-service vendor.hvdcp_opti /system/vendor/bin/hvdcp_opti
-    class main
-    user root
-    group system wakelock
-
-service tlocd /vendor/bin/tloc_daemon
-    class late_start
-    user system
-    group drmrpc gps net_raw
-
-service smcinvoked /system/bin/smcinvoked
-    class main
-    user system
-    group system
-
 # Huaqin add SAMSUNG Remosaic for ZQL1822 by chenjun at 2018/9/18 start
 service remosaic_daemon /system/vendor/bin/remosaic_daemon
     class late_start

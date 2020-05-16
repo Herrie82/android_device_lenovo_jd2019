@@ -14,23 +14,21 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo300
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := kryo385
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := kryo
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := kryo385
 
 TARGET_USES_64_BIT_BINDER := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := sdm710
 TARGET_NO_BOOTLOADER := true
-
-# FM
-BOARD_HAS_QCA_FM_SOC := "cherokee"
-BOARD_HAVE_QCOM_FM := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xA90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 service_locator.enable=1 androidboot.configfs=true androidboot.usbcontroller=a600000.dwc3 swiotlb=1 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7
@@ -50,9 +48,16 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/lenovo/sdm710
 TARGET_KERNEL_CONFIG := jd2019_defconfig
 
+#TARGET_KERNEL_ADDITIONAL_FLAGS := \
+#    DTC=$(shell pwd)/prebuilts/misc/$(HOST_OS)-x86/dtc/dtc \
+#    MKDTIMG=$(shell pwd)/prebuilts/misc/$(HOST_OS)-x86/libufdt/mkdtimg
+
 # Platform
 TARGET_BOARD_PLATFORM := sdm710
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno616
+
+# APEX
+DEXPREOPT_GENERATE_APEX_IMAGE := true
 
 # Assert
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
@@ -86,7 +91,6 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
 
 # DRM
 TARGET_ENABLE_MEDIADRM_64 := true
@@ -94,10 +98,11 @@ TARGET_ENABLE_MEDIADRM_64 := true
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
 
+# FM
+BOARD_HAS_QCA_FM_SOC := "cherokee"
+BOARD_HAVE_QCOM_FM := true
+
 # Graphics
-MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 2
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 TARGET_USES_GRALLOC1 := true
 TARGET_USES_HWC2 := true
 TARGET_USES_ION := true
@@ -127,12 +132,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 
 BOARD_FLASH_BLOCK_SIZE := 262144						# (BOARD_KERNEL_PAGESIZE * 64)
 
-BOARD_ROOT_EXTRA_SYMLINKS := \
-    /mnt/vendor/persist:/persist \
-    /vendor/bt_firmware:/bt_firmware \
-    /vendor/dsp:/dsp \
-    /vendor/firmware_mnt:/firmware
-
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
@@ -141,7 +140,6 @@ TARGET_USES_MKE2FS := true
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Power
-TARGET_HAS_NO_WLAN_STATS := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/touch/tp_dev/gesture_on"
 TARGET_USES_INTERACTION_BOOST := true
 
@@ -155,12 +153,12 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
-# RenderScript
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
-
 # Releasetools
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_jd2019
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
+
+# RenderScript
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
@@ -181,11 +179,13 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 # Treble
 BOARD_VNDK_VERSION := current
 PRODUCT_FULL_TREBLE_OVERRIDE := true
+PRODUCT_EXTRA_VNDK_VERSIONS := 28
 
 # Verified Boot
-BOARD_AVB_ENABLE := false
-#BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flag 2
-BOARD_BUILD_DISABLED_VBMETAIMAGE := true
+#BOARD_AVB_ENABLE := true
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flag 2
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --set_hashtree_disabled_flag
+#BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
@@ -199,6 +199,7 @@ WIFI_DRIVER_STATE_OFF := "OFF"
 WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+TARGET_HAS_NO_WLAN_STATS := true
 
 BOARD_VENDOR_KERNEL_MODULES += \
 $(DEVICE_PATH)/modules/adsp_loader_dlkm.ko \

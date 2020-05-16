@@ -36,6 +36,9 @@ ro.vendor.display.sensortype=2
 # Graphics
 persist.demo.hdmirotationlock=false
 persist.hwc.enable_vds=1
+ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
+ro.surface_flinger.max_frame_buffer_acquired_buffers=2
+ro.surface_flinger.max_virtual_display_dimension=4096
 
 # Memory optimizations
 ro.vendor.qti.sys.fw.bservice_enable=true
