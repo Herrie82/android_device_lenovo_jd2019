@@ -125,11 +125,9 @@ vendor/firmware/bdwlan_jd2019.bin
 
 # Camera
 lib/libchromaflash.so
-lib/libdualcameraddm.so
 lib/libjni_chromaflash.so
 lib/libjni_dualcamera.so
 lib64/libchromaflash.so
-lib64/libdualcameraddm.so
 lib64/libjni_chromaflash.so
 lib64/libjni_dualcamera.so
 vendor/camera/face++/beauty3D/db.txt
