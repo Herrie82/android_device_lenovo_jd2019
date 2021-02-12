@@ -912,7 +912,6 @@ vendor/etc/qdcm_calib_data_nt35597_cmd_mode_dsi_truly_panel_with_DSC.xml
 # QMI
 etc/permissions/qti_permissions.xml
 vendor/bin/irsc_util
-vendor/etc/sec_config
 vendor/lib64/libdiag.so
 vendor/lib64/libdsi_netctrl.so
 vendor/lib64/libdsutils.so
